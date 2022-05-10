@@ -168,6 +168,7 @@ void TcpClient::recvMsg()
             char oppname[32]={'\0'};
             strncpy(selfname,pdu->data,32);
             strncpy(oppname,pdu->data+32,32);
+            qDebug() << "oppname:" << oppname << "大小：" << strlen(oppname);
             int ret=QMessageBox::information(this, "添加好友", QString("%1 want to add you as friend ?").arg(selfname)
                                      , QMessageBox::Yes, QMessageBox::No);
             PDU *respdu=mkPDU(0);
@@ -196,7 +197,7 @@ void TcpClient::recvMsg()
         {
             char oppName[32] = {'\0'};
             memcpy(oppName, pdu->data+32, 32);
-            QMessageBox::information(this, "添加好友", QString("添加%1好友成功").arg(oppName));
+            QMessageBox::information(this, "添加好友", QString("添加%1好友失败").arg(oppName));
             break;
         }
         case ENUM_MSG_TYPE_ADD_FRIEND_UNKNOW_ERR:
@@ -398,6 +399,12 @@ void TcpClient::recvMsg()
                     m_tcpSocket.write((char*)respdu, respdu->uiPDULen);
                 }
             }
+            break;
+        }
+        case ENUM_MSG_TYPE_SHARE_FILE_SUCCESS:
+        {
+            QMessageBox::information(this,"分享文件",pdu->data);
+            OperateWidget::getInstance().getBook()->flushFile();
             break;
         }
         case ENUM_MSG_TYPE_MOVE_FILE_RESPOND:

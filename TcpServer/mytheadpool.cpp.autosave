@@ -1,0 +1,19 @@
+#include "mytheadpool.h"
+
+myTheadPool::myTheadPool(QObject *parent) : QObject(parent),QRunnable()
+{
+    setAutoDelete(true);
+}
+
+void myTheadPool::run()
+{
+    MyTcpSocket *pTcpSocket=new MyTcpSocket;
+    pTcpSocket->setSocketDescriptor(socketDescriptor);
+    emit sendTcpSock(pTcpSocket);
+    connect(pTcpSocket,&MyTcpSocket::readyRead,pTcpSocket,&MyTcpSocket::recvMesg);
+}
+
+void myTheadPool::recvCfd(qintptr socketDescriptor)
+{
+    m_socketDescriptor=socketDescriptor;
+}

@@ -4,7 +4,9 @@
 #include <QTcpServer>
 #include <QDebug>
 #include <QList>
+#include <QThreadPool>
 #include "mytcpsocket.h"
+#include "mythreadpool.h"
 //#include "log.h"
 
 class MyTcpServer : public QTcpServer
@@ -21,8 +23,10 @@ public:
     void resend(const char * oppname,PDU *pdu);
 private:
     QList<MyTcpSocket*> m_tcpSocketList;
+    MyTcpSocket *m_tcpSock;
 signals:
-    void sendTcp(MyTcpSocket* pTcpSocket);
+    void sendCfd(qintptr socketDescriptor);
+    void resendThread(PDU *pdu);
 
 public slots:
     void deleteScoket(MyTcpSocket *mysocket);

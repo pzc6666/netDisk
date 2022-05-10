@@ -135,6 +135,7 @@ bool OpenDb::handleAddFriendAgree(const char *selfName, const char *oppName)
     {
         return false;
     }
+    qDebug() << "好友名字：" << oppName;
     QString data = QString("insert into friend(id, friendId) values((select id from usrInfo where name=\'%1\'), (select id from usrInfo where name=\'%2\'))").arg(selfName).arg(oppName);
     QSqlQuery query;
     return query.exec(data);

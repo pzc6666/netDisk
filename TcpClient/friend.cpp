@@ -59,6 +59,7 @@ void Friend::showAllOnlineUser(PDU *pdu)
 void Friend::updateFriendList(PDU *pdu)
 {
     m_pFriendListWidget->clear();
+    qDebug() << "刷新好友列表！";
     uint uiSize = pdu->uiMsgLen/32;
     char msg[32] = {'\0'};
     for (uint i=0; i<uiSize; i++)

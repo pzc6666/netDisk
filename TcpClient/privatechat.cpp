@@ -30,16 +30,16 @@ void PrivateChat::updateMsg(PDU *pdu)
     QDateTime timeCurrent = QDateTime::currentDateTime();
     QString time = timeCurrent.toString("hh:mm");
     QString strMsg = QString("(%1)%2 says: %3").arg(time).arg(caSendName).arg((char*)(pdu->caMsg));
+    qDebug() << "updateMsg" << caSendName << strMsg ;
     ui->msg_show->append(strMsg);
 }
 
 void PrivateChat::myMsgShow(PDU *pdu)
 {
-    qDebug() << (char*)pdu->caMsg;
     QDateTime timeCurrent = QDateTime::currentDateTime();
     QString time = timeCurrent.toString("hh:mm");
     QString strMsg = QString("(%1)my says: %2").arg(time).arg((char*)pdu->caMsg);
-    qDebug() << strMsg;
+    qDebug() << "myMsgShow" << strMsg;
     ui->msg_show->append(strMsg);
 }
 

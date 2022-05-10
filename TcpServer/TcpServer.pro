@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     protocol.cpp \
     opendb.cpp \
     log.cpp \
-    logworker.cpp
+    logworker.cpp \
+    mythreadpool.cpp
 
 HEADERS  += tcpserver.h \
     mytcpserver.h \
@@ -27,7 +28,8 @@ HEADERS  += tcpserver.h \
     protocol.h \
     opendb.h \
     log.h \
-    logworker.h
+    logworker.h \
+    mythreadpool.h
 
 FORMS    += tcpserver.ui
 

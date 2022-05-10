@@ -53,8 +53,6 @@ void MyTcpSocket::copyDir(QString strSrcDir, QString strDestDir)
 void MyTcpSocket::recvMesg()
 {
     qDebug() << "run：" << QThread::currentThreadId() ;
-    //QEventLoop eventLoop;
-//    connect(tcp,&MyTcpSocket::readyRead,tcp,[=](){
     if(!m_bUpload)
     {
         qDebug() << "接受数据线程号为：" << QThread::currentThreadId() ;
@@ -103,7 +101,6 @@ void MyTcpSocket::recvMesg()
             bool ret=OpenDb::getInstance().handleLogin(name,password);
             PDU *respdu=mkPDU(0);
             respdu->uiMsgType=ENUM_MSG_TYPE_LOGIN_RESPOND;
-            qDebug() << "------1";
             if(ret)
             {
                 strcpy(respdu->data,LOGIN_OK);
@@ -113,11 +110,9 @@ void MyTcpSocket::recvMesg()
             {
                 strcpy(respdu->data,LOGIN_FAILED);
             }
-            qDebug() << "------2";
             write((char*)respdu,respdu->uiPDULen);
             free(respdu);
             respdu=NULL;
-            qDebug() << "------3";
             break;
         }
         case ENUM_MSG_TYPE_CANCEL_REQUEST:
@@ -634,6 +629,12 @@ void MyTcpSocket::recvMesg()
             {
                 copyDir(strShareFilePath, strRecvPath);
             }
+            PDU* respdu = mkPDU(0);
+            respdu->uiMsgType = ENUM_MSG_TYPE_SHARE_FILE_SUCCESS;
+            strcpy(respdu->data, "accept file ok");
+            write((char*)respdu, respdu->uiPDULen);
+            free(respdu);
+            respdu = NULL;
             break;
         }
         case ENUM_MSG_TYPE_MOVE_FILE_REQUEST:
@@ -718,10 +719,6 @@ void MyTcpSocket::recvMesg()
             respdu = NULL;
         }
     }
-
-//    });
-    // 进入事件循环
-   // eventLoop.exec();
 }
 void MyTcpSocket::clientOffline()
 {
@@ -761,7 +758,13 @@ void MyTcpSocket::sendFileToClient()
     pData=NULL;
 }
 
-void MyTcpSocket::recvTcp(MyTcpSocket *mysocket)
+void MyTcpSocket::resendWrite(PDU *resendPdu)
 {
-    tcp=mysocket;
+    if(resendPdu->uiMsgType==ENUM_MSG_TYPE_PRIVATECHAT_FRIEND_REQUEST)
+    {
+        qDebug() << "ENUM_MSG_TYPE_PRIVATECHAT_FRIEND_REQUEST" ;
+    }
+    write((char*)resendPdu,resendPdu->uiPDULen);
+    free(resendPdu);
+    resendPdu=NULL;
 }

@@ -24,7 +24,7 @@ signals:
 public slots:
     void clientOffline();
     void sendFileToClient();
-    void recvTcp(MyTcpSocket *mysocket);
+    void resendWrite(PDU *pdu);
 private:
     QString m_strName;
     QFile m_file;
